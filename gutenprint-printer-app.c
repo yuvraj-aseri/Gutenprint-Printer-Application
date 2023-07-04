@@ -1,12 +1,7 @@
 
-
-//
 // Include necessary headers...
 #include <strings.h>
-
 #include <pappl/pappl.h>
-
-
 
 # define gutenprint_TESTPAGE_HEADER	"T*E*S*T*P*A*G*E*"
 #  define gutenprint_TESTPAGE_MIMETYPE	"application/vnd.cups-paged-gutenprint"
@@ -14,9 +9,7 @@
 
 extern bool	gutenprint_gen(pappl_system_t *system, const char *driver_name, const char *device_uri, const char *device_id, pappl_pr_driver_data_t *data, ipp_t **attrs, void *cbdata);
 
-//
 // Local functions...
-//
 
 static const char *autoadd_cb(const char *device_info, const char *device_uri, const char *device_id, void *cbdata);
 static bool	driver_cb(pappl_system_t *system, const char *driver_name, const char *device_uri, const char *device_id, pappl_pr_driver_data_t *data, ipp_t **attrs, void *cbdata);
@@ -25,24 +18,17 @@ static const char *mime_cb(const unsigned char *header, size_t headersize, void 
 static bool	printer_cb(const char *device_info, const char *device_uri, const char *device_id, pappl_system_t *system);
 static pappl_system_t *system_cb(int num_options, cups_option_t *options, void *data);
 
-
-//
 // Local globals...
-//
 
 static pappl_pr_driver_t	gutenprint_drivers[] =
 {					// Driver list
 { "gen_gutenprint",  "Generic",
   NULL, NULL },
-
 };
 static char			gutenprint_statefile[1024];
 					// State file
 
-
-//
 // 'main()' - Main entry for gutenprint.
-//
 
 int					// O - Exit status
 main(int  argc,				// I - Number of command-line arguments
@@ -59,10 +45,7 @@ main(int  argc,				// I - Number of command-line arguments
                         /*data*/NULL));
 }
 
-
-//
 // 'autoadd_cb()' - Determine the proper driver for a given printer.
-//
 
 static const char *			// O - Driver name or `NULL` for none
 autoadd_cb(const char *device_info,	// I - Device information/name (not used)
@@ -78,8 +61,6 @@ autoadd_cb(const char *device_info,	// I - Device information/name (not used)
   const char	*make,			// Manufacturer name
 		*best_name = NULL;	// Best driver
  
-
-
   (void)device_info;
 
   // First parse the device ID and get any potential driver name to match...
@@ -90,11 +71,9 @@ autoadd_cb(const char *device_info,	// I - Device information/name (not used)
       make = cupsGetOption("MFG", num_did, did);
 
   
-  // // Then loop through the driver list to find the best match...
-  // for (i = 0; i < (int)(sizeof(gutenprint_drivers) / sizeof(gutenprint_drivers[0])); i ++)
-  {
- 
+  // loop through the driver list to find the best match...
 
+  {
     if (gutenprint_drivers[i].device_id)
     {
       // See if we have a matching device ID...
@@ -106,20 +85,13 @@ autoadd_cb(const char *device_info,	// I - Device information/name (not used)
       }
     }
    }
-
   // Clean up and return...
   cupsFreeOptions(num_did, did);
-
   return (best_name);
 }
 
-
-
 //
 // 'match_id()' - Compare two IEEE-1284 device IDs and return a score.
-//
-// The score is 2 for each exact match and 1 for a partial match in a comma-
-// delimited field.  Any non-match results in a score of 0.
 //
 
 static int				// O - Score
@@ -149,7 +121,6 @@ match_id(int           num_did,		// I - Number of device ID key/value pairs
       score = 0;
       break;
     }
-
     if (!strcasecmp(current->value, value))
     {
       // Full match!
@@ -197,7 +168,6 @@ driver_cb(
 {
   int	i;				// Looping var
 
-
   // Copy make/model info...
   for (i = 0; i < (int)(sizeof(gutenprint_drivers) / sizeof(gutenprint_drivers[0])); i ++)
   {
@@ -210,7 +180,6 @@ driver_cb(
 
   // Pages per minute 
   data->ppm = 60;
-
  
   // Color values...
   data->color_supported   = PAPPL_COLOR_MODE_AUTO | PAPPL_COLOR_MODE_MONOCHROME;
@@ -227,12 +196,8 @@ driver_cb(
 
   // "orientation-requested-default" value...
   data->orient_default = IPP_ORIENT_NONE;
-
-
-  // Test page callback...
- // data->testpage_cb = lprintTestPageCB;
-
-  // Use the corresponding sub-driver callback to set things up...
+  // Use the corresponding su // data->testpage_cb = lprintTestPageCB;
+b-driver callback to set things up...
   if (!strncmp(driver_name, "gen_", 4))
     return (gutenprint_gen(system, driver_name, device_uri, device_id, data, attrs, cbdata));
  
@@ -249,14 +214,8 @@ mime_cb(const unsigned char *header,	// I - Header data
         size_t              headersize,	// I - Size of header data
         void                *cbdata)	// I - Callback data (not used)
 {
-
-
-
-
-    return (gutenprint_TESTPAGE_MIMETYPE);
-  
+    return (gutenprint_TESTPAGE_MIMETYPE); 
 }
-
 
 //
 // 'printer_cb()' - Try auto-adding printers.
@@ -270,7 +229,7 @@ printer_cb(const char     *device_info,	// I - Device information
 {
   const char *driver_name = autoadd_cb(device_info, device_uri, device_id, system);
 					// Driver name, if any
-
+					
   if (driver_name)
   {
     char	name[128],		// Printer name
@@ -292,7 +251,7 @@ printer_cb(const char     *device_info,	// I - Device information
 
       for (i = 2; i < 100; i ++)
       {
-        // Append " NNN" to the name, truncating the existing name as needed to
+        // Append "XXX" to the name, truncating the existing name as needed to
         // include the number at the end...
         snprintf(number, sizeof(number), " %d", i);
         numberlen = strlen(number);
@@ -302,7 +261,6 @@ printer_cb(const char     *device_info,	// I - Device information
           memcpy(newname + namelen, number, numberlen + 1);
         else
           memcpy(newname + sizeof(newname) - numberlen - 1, number, numberlen + 1);
-
         // Try creating with this name...
         if (papplPrinterCreate(system, 0, newname, driver_name, device_id, device_uri))
           break;
@@ -313,12 +271,11 @@ printer_cb(const char     *device_info,	// I - Device information
   return (false);
 }
 
+// 'system_cb()' - Setup the 
+//system object.
 
-//
-// 'system_cb()' - Setup the system object.
-//
-
-static pappl_system_t *			// O - System object
+static pappl_system_t *			// //
+O - System object
 system_cb(
     int           num_options,		// I - Number options
     cups_option_t *options,		// I - Options
@@ -337,8 +294,8 @@ system_cb(
   {
     { "gutenprint", "", 1.0, 1.0}};
 
-
-  // Parse standard log and server options...
+  // Parse standard log and s
+erver options...
   if ((val = cupsGetOption("log-level", num_options, options)) != NULL)
   {
     if (!strcmp(val, "fatal"))
@@ -402,22 +359,21 @@ system_cb(
   {
     papplCopyString(gutenprint_statefile, "/etc/gutenprint.conf", sizeof(gutenprint_statefile));
   }
-#endif // _WIN32
+#endif 
 
-  // Create the system object...
+  // Create the system objec// _WIN32t...
   if ((system = papplSystemCreate(soptions, system_name ? system_name : "gutenprint", port, "_print,_universal", cupsGetOption("spool-directory", num_options, options), logfile ? logfile : "-", loglevel, cupsGetOption("auth-service", num_options, options), /* tls_only */false)) == NULL)
     return (NULL);
 
   papplSystemAddListeners(system, NULL);
   papplSystemSetHostName(system, hostname);
 
-  papplSystemSetMIMECallback(system, mime_cb, NULL);
-  //papplSystemAddMIMEFilter(system, gutenprint_TESTPAGE_MIMETYPE, "image/pwg-raster", lprintTestFilterCB, NULL);
+  papplSystemSetMIMECallback(system, mime_cb, NULL); //note this...
 
-  papplSystemSetPrinterDrivers(system, (int)(sizeof(gutenprint_drivers) / sizeof(gutenprint_drivers[0])), gutenprint_drivers, autoadd_cb, /*create_cb*/NULL, driver_cb, system);
+  papplSystemrs(system, (int)(sizeof(gutenprint_drivutenprint_TESTPAGE_MIMETYPE, "image/pwg-raster", lprintTestFilterCB, NULL);ers) / sizeof(gutenprint_drivers[0])), gutenprint_drivers, autoadd_cb, /*create_cb*/NULL, driver_cb, system);
+  papplSystemSetFooterHTML(system, "Copyright &copy; 2019-2021 by Mi
 
-  
-  papplSystemSetFooterHTML(system, "Copyright &copy; 2019-2021 by Michael R Sweet. All rights reserved.");
+  chael R Sweet. All rights reserved.");
   papplSystemSetSaveCallback(system, (pappl_save_cb_t)papplSystemSaveState, (void *)gutenprint_statefile);
   papplSystemSetVersions(system, (int)(sizeof(versions) / sizeof(versions[0])), versions);
 

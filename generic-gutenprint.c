@@ -1,20 +1,8 @@
-
-
-//
 // Include necessary headers...
-//
-
 #include <pappl/pappl.h>
 #include<math.h>
 
-//
-// Local globals...
-//
-
-
-//
 // Local functions...
-//
 
 static bool	gutenprint_gen_printfile(pappl_job_t *job, pappl_pr_options_t *options, pappl_device_t *device);
 static bool	gutenprint_gen_rendjob(pappl_job_t *job, pappl_pr_options_t *options, pappl_device_t *device);
@@ -25,8 +13,8 @@ static bool	gutenprint_gen_status(pappl_printer_t *printer);
 static bool	gutenprint_gen_rwriteline(pappl_job_t *job, pappl_pr_options_t *options, pappl_device_t *device, unsigned y, const unsigned char *line);
 
 static const char * const gutenprint_gen_media[] =
-{       // Supported media sizes for Generic gutenprint printers
-   "na_legal_8.5x14in",
+{  // Supported media sizes for Generic gutenprint printers
+  "na_legal_8.5x14in",
   "na_letter_8.5x11in",
   "na_executive_7x10in",
   "iso_a4_210x297mm",
@@ -38,8 +26,6 @@ static const char * const gutenprint_gen_media[] =
   "iso_dl_110x220mm",
   "na_monarch_3.875x7.5in"
 };
-
-
 
 bool					// O - `true` on success, `false` on error
 gutenprint_gen(
@@ -66,20 +52,14 @@ gutenprint_gen(
   // data->x_resolution[1] = 300;
   // data->y_resolution[1] = 300;
 
-  data->x_default = data->y_default = data->x_resolution[0];
-
-  
+  data->x_default = data->y_default = data->x_resolution[0];  
   data->num_media = (int)(sizeof(gutenprint_gen_media) / sizeof(gutenprint_gen_media[0]));
   memcpy(data->media, gutenprint_gen_media, sizeof(gutenprint_gen_media));
-  
     papplCopyString(data->media_default.size_name,"iso_a4_210x297mm", sizeof(data->media_default.size_name));
     data->media_default.size_width  = 1 * 21000;
     data->media_default.size_length = 1 * 29700;
   data->left_right = 635;	 // 1/4" left and right
   data->bottom_top = 1270;	
-  
-
-
   data->media_default.bottom_margin = data->bottom_top;
   data->media_default.left_margin   = data->left_right;
   data->media_default.right_margin  = data->left_right;
@@ -90,7 +70,7 @@ gutenprint_gen(
     data->source[0]  = "tray-1";
     data->source[1]  = "manual";
     data->source[2]  = "envelope";
-    //a types (MSN names) */
+    //* Types (MSN names) */
     data->num_type = 8;
     data->type[0]  = "stationery";
     data->type[1]  = "stationery-inkjet";
@@ -107,10 +87,7 @@ gutenprint_gen(
   return (true);
 }
 
-
-//
 // 'gutenprint_generic_print()' - Print a file.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_printfile(
@@ -121,7 +98,6 @@ gutenprint_gen_printfile(
   int		fd;			// Input file
   ssize_t	bytes;			// Bytes read/written
   char		buffer[65536];		// Read/write buffer
-
 
   // Copy the raw file...
   papplJobSetImpressions(job, 1);
@@ -148,10 +124,7 @@ gutenprint_gen_printfile(
   return (true);
 }
 
-
-//
 // 'gutenprint_generic_rendjob()' - End a job.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_rendjob(
@@ -166,10 +139,7 @@ gutenprint_gen_rendjob(
   return (true);
 }
 
-
-//
 // 'gutenprint_generic_rendpage()' - End a page.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_rendpage(
@@ -187,10 +157,7 @@ gutenprint_gen_rendpage(
   return (true);
 }
 
-
-//
 // 'gutenprint_generic_rstartjob()' - Start a job.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_rstartjob(
@@ -233,10 +200,7 @@ gutenprint_gen_rwriteline(
   return (true);
 }
 
-
-//
 // 'gutenprint_generic_rstartpage()' - Start a page.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_rstartpage(
@@ -247,23 +211,13 @@ gutenprint_gen_rstartpage(
 {
   int		ips;			// Inches per second
 
-
   (void)job;
   (void)page;
-
-  papplDevicePuts(device, "\nN\n");
-
-
- 
+  papplDevicePuts(device, "\nN\n"); 
   return (true);
 }
 
-
-
-
-//
 // 'gutenprint_generic_status()' - Get current printer status.
-//
 
 static bool				// O - `true` on success, `false` on failure
 gutenprint_gen_status(
