@@ -1,12 +1,3 @@
-#
-# Makefile for the HP Printer Application
-#
-# Copyright © 2020-2022 by Michael R Sweet
-#
-# Licensed under Apache License v2.0.  See the file "LICENSE" for more
-# information.
-#
-
 # POSIX makefile
 .POSIX:
 
@@ -22,7 +13,6 @@ libdir		=	$(prefix)/lib
 mandir		=	$(prefix)/share/man
 unitdir 	=	`pkg-config --variable=systemdsystemunitdir systemd`
 
-
 # Compiler/linker options...
 CSFLAGS		=	-s "$${CODESIGN_IDENTITY:=-}" --timestamp -o runtime
 CFLAGS		=	$(CPPFLAGS) $(OPTIM)
@@ -33,22 +23,15 @@ OPTIM		=	-Os -g
 # Uncomment the following line to enable experimental PCL 6 support
 #OPTIONS	=	-DWITH_PCL6=1
 
-
-
 # Targets...
-OBJS		=	\
-			generic-gutenprint.o \
-			gutenprint-printer-app.o
-TARGETS		=	\
-			gutenprint-printer-app
-
+OBJS		=	gutenprint-printer-app.o
+TARGETS		=	gutenprint-printer-app
 
 # General build rules...
 .SUFFIXES:	.c .o
 .c.o:
 	echo "Compiling $<..."
 	$(CC) $(CFLAGS) -c -o $@ $<
-
 
 # Targets...
 all:		$(TARGETS)
@@ -70,11 +53,8 @@ install:	$(TARGETS)
 		cp gutenprint-printer-app.service $(unitdir); \
 	fi
 
-	
-
 gutenprint-printer-app:	$(OBJS)
 	echo "Linking $@..."
-	$(CC) $(LDFLAGS) -o $@ gutenprint-printer-app.o generic-gutenprint.o $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ gutenprint-printer-app.o $(LIBS)
 
-$(OBJS):	 Makefile
-
+$(OBJS):	Makefile
