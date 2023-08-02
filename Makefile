@@ -11,7 +11,7 @@ includedir	=	$(prefix)/include
 bindir		=	$(prefix)/bin
 libdir		=	$(prefix)/lib
 mandir		=	$(prefix)/share/man
-unitdir 	=	`pkg-config --variable=systemdsystemunitdir systemd`
+unitdir		=	`pkg-config --variable=systemdsystemunitdir systemd`
 
 # Compiler/linker options...
 CSFLAGS		=	-s "$${CODESIGN_IDENTITY:=-}" --timestamp -o runtime
@@ -24,8 +24,12 @@ OPTIM		=	-Os -g
 #OPTIONS	=	-DWITH_PCL6=1
 
 # Targets...
-OBJS		=	gutenprint-printer-app.o
-TARGETS		=	gutenprint-printer-app
+OBJS		=	\
+			generic-gutenprint.o \
+			gutenprint-printer-app.o \
+			rastertogutenprint.o # Add rastertogutenprint.o to the list of object files
+TARGETS		=	\
+			gutenprint-printer-app
 
 # General build rules...
 .SUFFIXES:	.c .o
@@ -55,6 +59,7 @@ install:	$(TARGETS)
 
 gutenprint-printer-app:	$(OBJS)
 	echo "Linking $@..."
-	$(CC) $(LDFLAGS) -o $@ gutenprint-printer-app.o $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ gutenprint-printer-app.o generic-gutenprint.o rastertogutenprint.o $(LIBS) # Add rastertogutenprint.o to the link command
 
 $(OBJS):	Makefile
+
