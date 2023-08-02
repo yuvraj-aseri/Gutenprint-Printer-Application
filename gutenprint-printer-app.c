@@ -2,6 +2,8 @@
 // Include necessary headers...
 #include <strings.h>
 #include <pappl/pappl.h>
+#include <gutenprint/gutenprint.h>
+
 
 # define gutenprint_TESTPAGE_HEADER	"T*E*S*T*P*A*G*E*"
 #  define gutenprint_TESTPAGE_MIMETYPE	"application/vnd.cups-paged-gutenprint"
@@ -20,11 +22,7 @@ static pappl_system_t *system_cb(int num_options, cups_option_t *options, void *
 
 // Local globals...
 
-static pappl_pr_driver_t	gutenprint_drivers[] =
-{					// Driver list
-{ "gen_gutenprint",  "Generic",
-  NULL, NULL },
-};
+
 static char			gutenprint_statefile[1024];
 					// State file
 
